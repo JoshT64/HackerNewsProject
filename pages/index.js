@@ -10,7 +10,7 @@ export default function Home() {
       </Head>
 
       <main className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
-        <div>Hello World!</div>
+        <div>Hello World.</div>
       </main>
 
       <footer className='flex items-center justify-center w-full h-24 border-t-2 border-blue-300'>
