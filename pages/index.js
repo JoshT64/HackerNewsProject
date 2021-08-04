@@ -1,7 +1,5 @@
 import Head from 'next/head';
-import RenderedData from '../components/RenderedData';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
-import { Fragment } from 'react';
 import Header from '../components/Header';
 import TestAPI from '../components/TestAPI';
 
