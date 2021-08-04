@@ -1,6 +1,6 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialGetDataState = { data: '', isLoading: false };
+const initialGetDataState = { data: [], isLoading: true };
 
 const apiSlice = createSlice({
   name: 'getData',

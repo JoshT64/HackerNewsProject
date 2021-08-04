@@ -1,28 +1,30 @@
+import React from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiActions } from '../store/api-state';
 
-const url = 'https://hacker-news.firebaseio.com/v0/item/8863.json?print=pretty';
+const url =
+  'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty';
 
-const Fetch = async () => {
+const fetch = () => {
   const dispatch = useDispatch();
 
   const apiData = useSelector((state) => state.data);
   const loading = useSelector((state) => state.isLoading);
 
   dispatch(apiActions.loading(true));
-  await axios
+  axios
     .get(url)
     .then((response) => {
-      dispatch(apiActions.fetchData(JSON.stringify(response.data, null, 2)));
+      dispatch(apiActions.fetchData(response.data));
       dispatch(apiActions.loading(false));
     })
     .catch((err) => {
       console.error(err);
       dispatch(apiActions.dataFailed());
     });
-  console.log(loading);
+  console.log('test');
   return null;
 };
-
-export default Fetch;
+fetch();
+export default fetch;

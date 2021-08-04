@@ -3,6 +3,7 @@ import RenderedData from '../components/RenderedData';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
 import { Fragment } from 'react';
 import Header from '../components/Header';
+import TestAPI from '../components/TestAPI';
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
         </Head>
 
         <main className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
-          <RenderedData />
+          <TestAPI />
           <div>Hello World.</div>
         </main>
         <footer className='flex items-center justify-center w-full h-24 border-t-2 border-blue-300'>
