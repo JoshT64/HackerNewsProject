@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import RenderedData from '../components/RenderedData';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       </Head>
 
       <main className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
+        <RenderedData />
         <div>Hello World.</div>
       </main>
 
