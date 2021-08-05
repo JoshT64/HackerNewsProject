@@ -3,14 +3,17 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiActions } from '../store/api-state';
-//make website look like iphone messages
-const TestAPI = () => {
-  const dispatch = useDispatch();
-  const newStoriesUrl =
-    'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-  const loading = useSelector((state) => state.isLoading);
-  const storyIds = useSelector((state) => state.data);
+const TestAPI = (props) => {
+  const router = useRouter();
+  const { id } = router.query;
+  const dispatch = useDispatch();
+  const newStoriesUrl = props.url;
+
+  // const loading = useSelector((state) => state.isLoading);
+  const storyIds = useSelector((state) => state.title);
 
   const [stories, setStories] = useState([]);
   const [storyId, setStoryId] = useState([]);
@@ -26,8 +29,6 @@ const TestAPI = () => {
     await axios
       .get(newStoriesUrl)
       .then((response) => {
-        // dispatch(apiActions.fetchData(response.data));
-        dispatch(apiActions.loading(false));
         setStoryId(response.data);
       })
       .catch((err) => {
@@ -36,24 +37,20 @@ const TestAPI = () => {
       });
   };
 
-  useEffect(async () => {
-    await fetchAfter();
+  useEffect(() => {
+    fetchAfter();
     setIsLoading(true);
   }, [storyId]);
 
-  const fetchAfter = async () => {
-    storyId.forEach(async (id) => {
-      //   console.log(id);
-      await axios
+  const fetchAfter = () => {
+    storyId.forEach((id) => {
+      axios
         .get(
           `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
         )
         .then((response) => {
           let responseData = response.data;
-          //   console.log(responseData);
           setStories((prevStories) => [...prevStories, responseData]);
-
-          //   console.log(stories + ' hi test' + 1 + 1);
         });
       setTimeout(() => {
         setIsLoading(false);
@@ -64,10 +61,10 @@ const TestAPI = () => {
   let sliceStories = stories.slice(0, 100); //Only show 100 results
 
   const printList = sliceStories.map((story, idx) => {
-    let kids;
-    if (story.kids !== undefined) {
-      // console.log(story.kids);
-      kids = story.kids.length;
+    let kidsItem;
+    let kidsDef = story.kids;
+    if (kidsDef !== undefined && story !== null) {
+      kidsItem = story.kids.length;
     }
 
     return (
@@ -80,21 +77,21 @@ const TestAPI = () => {
         key={idx}
         onClick={() => setToggle({ selectedItem: idx })}
       >
-        {console.log(toggle)}
-        <a
-          href={`${story.url}`}
-          className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 '
-        >{`${story.title} `}</a>
+        <Link
+          href={`/${story.id}`}
+          onClick={() => dispatch(apiActions.fetchData(story.id))}
+          className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 visited:text-gray-500 active:text-gray-500'
+        >{`${story.title} `}</Link>
         <div className='flex flex-row self-start'>
           <a
             href={`https://news.ycombinator.com/user?id=${story.by}`}
             className='text-blue-400 hover:text-gray-900'
           >{`${story.by}`}</a>
           <div className='ml-2 mr-2'>
-            {kids > 1 ? (
-              <p>{kids} Comments</p>
-            ) : kids == 1 ? (
-              <p>{kids} Comment</p>
+            {kidsItem > 1 ? (
+              <p>{kidsItem} Comments</p>
+            ) : kidsItem == 1 ? (
+              <p>{kidsItem} Comment</p>
             ) : null}
           </div>
         </div>
@@ -112,12 +109,12 @@ const TestAPI = () => {
           viewBox='0 0 24 24'
         >
           <circle
-            class='opacity-25'
+            className='opacity-25'
             cx='12'
             cy='12'
             r='10'
             stroke='currentColor'
-            stroke-width='4'
+            strokeWidth='4'
           ></circle>
           <path
             class='opacity-85'

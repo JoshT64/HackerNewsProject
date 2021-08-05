@@ -1,20 +1,14 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialGetDataState = { data: [], isLoading: true };
+const initialGetDataState = { title: '1' };
 
 const apiSlice = createSlice({
   name: 'getData',
   initialState: initialGetDataState,
   reducers: {
     fetchData(state, action) {
-      state.data = action.payload; //fetchedData;
-    },
-    loading(state, action) {
-      state.loading = action.payload;
-    },
-    dataFailed(state) {
-      state.data =
-        'Your requested data has failed to load, please contact the developer.';
+      console.log(action);
+      state.title = action.payload; //fetchedData;
     },
   },
 });
