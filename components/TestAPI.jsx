@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiActions } from '../store/api-state';
-
+//make website look like iphone messages
 const TestAPI = () => {
   const dispatch = useDispatch();
   const newStoriesUrl =
@@ -14,14 +14,17 @@ const TestAPI = () => {
 
   const [stories, setStories] = useState([]);
   const [storyId, setStoryId] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [toggle, setToggle] = useState({ selectedItem: '' });
 
   useEffect(() => {
     fetchNew();
+    setIsLoading(true);
   }, []);
 
   const fetchNew = async () => {
     await axios
-      .get(newStoriesUrl, { params: { _limit: 10 } })
+      .get(newStoriesUrl)
       .then((response) => {
         // dispatch(apiActions.fetchData(response.data));
         dispatch(apiActions.loading(false));
@@ -33,14 +36,15 @@ const TestAPI = () => {
       });
   };
 
-  useEffect(() => {
-    fetchAfter();
+  useEffect(async () => {
+    await fetchAfter();
+    setIsLoading(true);
   }, [storyId]);
 
-  const fetchAfter = () => {
-    storyId.forEach((id) => {
+  const fetchAfter = async () => {
+    storyId.forEach(async (id) => {
       //   console.log(id);
-      axios
+      await axios
         .get(
           `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
         )
@@ -50,29 +54,80 @@ const TestAPI = () => {
           setStories((prevStories) => [...prevStories, responseData]);
 
           //   console.log(stories + ' hi test' + 1 + 1);
-        })
-        .catch((err) => {
-          console.error(err);
         });
+      setTimeout(() => {
+        setIsLoading(false);
+      }, [1500]);
     });
   };
 
   let sliceStories = stories.slice(0, 100); //Only show 100 results
 
   const printList = sliceStories.map((story, idx) => {
+    let kids;
+    if (story.kids !== undefined) {
+      // console.log(story.kids);
+      kids = story.kids.length;
+    }
+
     return (
-      <li className='flex flex-row m-4' key={idx}>
-        <p className='mr-2'>Title:</p>
-        {`${story.title} `}
-        <p className='ml-2 mr-2'>Author:</p>
-        {`${story.by}`}
+      <li
+        className={
+          toggle.selectedItem === idx
+            ? 'flex flex-col m-4 flex-wrap items-start bg-gray-300'
+            : 'flex flex-col m-4 flex-wrap items-start'
+        }
+        key={idx}
+        onClick={() => setToggle({ selectedItem: idx })}
+      >
+        {console.log(toggle)}
+        <a
+          href={`${story.url}`}
+          className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 '
+        >{`${story.title} `}</a>
+        <div className='flex flex-row self-start'>
+          <a
+            href={`https://news.ycombinator.com/user?id=${story.by}`}
+            className='text-blue-400 hover:text-gray-900'
+          >{`${story.by}`}</a>
+          <div className='ml-2 mr-2'>
+            {kids > 1 ? (
+              <p>{kids} Comments</p>
+            ) : kids == 1 ? (
+              <p>{kids} Comment</p>
+            ) : null}
+          </div>
+        </div>
       </li>
     );
   });
 
   return (
     <div>
-      <ul>{printList}</ul>
+      {isLoading ? (
+        <svg
+          class='animate-spin -ml-1 mr-3 h-7 w-7 text-blue-500'
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
+        >
+          <circle
+            class='opacity-25'
+            cx='12'
+            cy='12'
+            r='10'
+            stroke='currentColor'
+            stroke-width='4'
+          ></circle>
+          <path
+            class='opacity-85'
+            fill='currentColor'
+            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+          ></path>
+        </svg>
+      ) : (
+        <ul>{printList}</ul>
+      )}
     </div>
   );
 };
