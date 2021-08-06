@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { apiActions } from '../store/api-state';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 const TestAPI = (props) => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const TestAPI = (props) => {
   const [stories, setStories] = useState([]);
   const [storyId, setStoryId] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [toggle, setToggle] = useState({ selectedItem: '' });
+  const [toggle, setToggle] = useState({ selectedItem: 0 });
 
   useEffect(() => {
     fetchNew();
@@ -58,7 +59,7 @@ const TestAPI = (props) => {
     });
   };
 
-  let sliceStories = stories.slice(0, 100); //Only show 100 results
+  let sliceStories = stories.slice(0, 90); //Only show 100 results
 
   const printList = sliceStories.map((story, idx) => {
     let kidsItem;
@@ -71,29 +72,41 @@ const TestAPI = (props) => {
       <li
         className={
           toggle.selectedItem === idx
-            ? 'flex flex-col m-4 flex-wrap items-start bg-gray-300'
-            : 'flex flex-col m-4 flex-wrap items-start'
+            ? 'flex flex-col m-4 ml-20 mr-6 flex-wrap items-start bg-gray-300 list'
+            : 'flex flex-col m-4 ml-20 mr-6 flex-wrap items-start list'
         }
         key={idx}
         onClick={() => setToggle({ selectedItem: idx })}
       >
-        <Link
-          href={`/${story.id}`}
-          onClick={() => dispatch(apiActions.fetchData(story.id))}
-          className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 visited:text-gray-500 active:text-gray-500'
-        >{`${story.title} `}</Link>
+        <div className='hover:text-gray-500 visited:text-gray-500'>
+          <Link
+            href={`/${story.id}`}
+            onClick={() => dispatch(apiActions.fetchData(story.id))}
+            className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 visited:text-gray-500 active:text-gray-500'
+          >{`${story.title} `}</Link>
+        </div>
+        <div className='post-number absolute left-2 mt-2 opacity-30'>
+          {idx + 1}
+        </div>
+        <div className='post-score absolute left-8 ml-2 mt-2 text-gray-600'>
+          {story.score}
+          <ThumbUpIcon className='mb-2 ml-1 mt-1' fontSize='small' />
+        </div>
         <div className='flex flex-row self-start'>
           <a
             href={`https://news.ycombinator.com/user?id=${story.by}`}
-            className='text-blue-400 hover:text-gray-900'
+            className='text-blue-400 hover:text-blue-500 hover:underline'
           >{`${story.by}`}</a>
-          <div className='ml-2 mr-2'>
+          <a
+            href={`/${story.id}`}
+            className='ml-2 mr-2 text-gray-400 cursor-pointer hover:underline'
+          >
             {kidsItem > 1 ? (
               <p>{kidsItem} Comments</p>
             ) : kidsItem == 1 ? (
               <p>{kidsItem} Comment</p>
             ) : null}
-          </div>
+          </a>
         </div>
       </li>
     );

@@ -1,4 +1,5 @@
 import 'tailwindcss/tailwind.css';
+import '../styles/global.css';
 import { Provider } from 'react-redux';
 import apiSlice from '../store/api-state';
 

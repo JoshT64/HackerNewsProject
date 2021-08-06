@@ -16,10 +16,16 @@ export default function Home() {
   return (
     <div className='bg-gray-200'>
       <Header />
-      <div className='flex flex-col items-center justify-center min-h-screen py-2'>
+      <div className='flex flex-col items-center justify-center min-h-screen'>
         <Head>
           <title>Create Next App</title>
           <link rel='icon' href='/favicon.ico' />
+          <link rel='preconnect' href='https://fonts.googleapis.com' />
+          <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+          <link
+            href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap'
+            rel='stylesheet'
+          />
         </Head>
         <div className=' w-full'>
           <TabContext value={value}>
