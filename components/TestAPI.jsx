@@ -1,20 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { apiActions } from '../store/api-state';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 const TestAPI = (props) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const dispatch = useDispatch();
   const newStoriesUrl = props.url;
-
-  // const loading = useSelector((state) => state.isLoading);
-  const storyIds = useSelector((state) => state.title);
 
   const [stories, setStories] = useState([]);
   const [storyId, setStoryId] = useState([]);
@@ -43,9 +35,9 @@ const TestAPI = (props) => {
     setIsLoading(true);
   }, [storyId]);
 
-  const fetchAfter = () => {
-    storyId.forEach((id) => {
-      axios
+  const fetchAfter = async () => {
+    storyId.forEach(async (id) => {
+      await axios
         .get(
           `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
         )
