@@ -1,46 +1,68 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Tab } from '@material-ui/core';
 import { TabPanel, TabContext, TabList } from '@material-ui/lab';
+import he from 'he';
 
 const Post = () => {
   const [value, setValue] = useState('1');
-  const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState([]);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const [postData, setPostData] = useState({
     title: '',
     text: '',
     comments: '',
     url: '',
   });
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const { id } = router.query;
-  // console.log(id);
 
   const fetchPost = async () => {
+    const postId = window.location.pathname.split('/')[1];
+
     await axios
-      .get(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`)
-      .then(async (response) => {
-        let titleData = await response.data.title;
-        let textData = await response.data.text;
-        let commentData = await response.data.kids;
-        let url = await response.data.url;
-        setPostData((prevPostData) => {
-          return {
-            title: titleData,
-            text: textData,
-            comments: commentData,
-            url: url,
-          };
+      .get(
+        `https://hacker-news.firebaseio.com/v0/item/${postId}.json?print=pretty`
+      )
+      .then((response) => {
+        let titleData = response.data.title;
+        let replacedText = response.data.text.replace(/<[^>]*>?/gm, '');
+        let textData = he.decode(replacedText);
+        let commentData = response.data.kids;
+        let url = response.data.url;
+        setPostData({
+          title: titleData,
+          text: textData,
+          comments: commentData,
+          url: url,
+        });
+
+        commentData.forEach(async (commentId) => {
+          axios
+            .get(
+              `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`
+            )
+            .then((response) => {
+              let commentResponseData = response.data.text;
+              let replacedComment = commentResponseData.replace(
+                /<[^>]*>?/gm,
+                ''
+              );
+              let decodedComment = he.decode(replacedComment);
+              setCommentText((commentText) => {
+                return [...commentText, decodedComment];
+              });
+            })
+            .catch((err) => {
+              console.error(err);
+            });
         });
       })
       .catch((err) => {
@@ -52,40 +74,9 @@ const Post = () => {
 
   useEffect(async () => {
     await fetchPost();
-  }, [id]);
+  }, []);
 
-  useEffect(() => {
-    const list = [...postData.comments];
-    // console.log(list);
-    setComments(() => {
-      return list;
-    });
-    fetchComments();
-  }, [postData.comments]);
-
-  // console.log(comments);
-
-  const fetchComments = async () => {
-    // console.log('isrunning');
-    // console.log(comments);
-    comments.forEach(async (commentId) => {
-      await axios
-        .get(
-          `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`
-        )
-        .then((response) => {
-          // console.log(response.data);
-          let responseData = response.data;
-          setCommentText((prevData) => {
-            return [...prevData, responseData];
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    });
-  };
-  // console.log(postData.text);
+  console.log(postData);
   return (
     <div className='bg-gray-200 min-h-screen flex flex-col'>
       <Header />
@@ -135,16 +126,28 @@ const Post = () => {
             </a>
           </div>
           <div className='rounded m-2 round inline align-middle'>
-            <p className='text-gray-900 max-w-6xl ml-4 border rounded  border-blue-300 leading-8 pl-4 pr-4 pt-2 pb-2'>
-              Text:{' '}
+            <p className='text-gray-900 max-w-6xl ml-6 border rounded  border-blue-300 leading-8 pl-4 pr-4 pt-2 pb-2'>
               {postData.text ? postData.text : 'There is no text to display'}
             </p>
           </div>
           <p className='m-2 mb-64'>
-            Comments:{' '}
-            {postData.comments
-              ? commentText.text
-              : 'There are no comments to display.'}
+            <div className='ml-4 mb-1 underline'>
+              {postData.comments.length} Comments:{' '}
+            </div>
+            <ul className='text-gray-900 max-w-6xl ml-4 border rounded flex flex-col border-blue-300 leading-8 pl-4 pr-4 pt-2 pb-2'>
+              {postData.comments
+                ? commentText.map((comment, idx) => {
+                    return (
+                      <li className='flex items-baseline' key={idx}>
+                        <p className='post-number mr-2 mb-2 opacity-30'>
+                          {idx + 1 + ':'}
+                        </p>
+                        {comment}
+                      </li>
+                    );
+                  })
+                : 'There are no comments to display.'}
+            </ul>
           </p>
         </div>
       )}

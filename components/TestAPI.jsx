@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { apiActions } from '../store/api-state';
 import Link from 'next/link';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import dynamic from 'next/dynamic';
 
 const TestAPI = (props) => {
   const newStoriesUrl = props.url;
