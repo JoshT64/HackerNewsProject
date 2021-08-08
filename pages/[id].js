@@ -16,7 +16,6 @@ const Post = () => {
     text: '',
     comments: '',
     url: '',
-    commentAuthor: '',
   });
 
   const handleChange = (event, newValue) => {
