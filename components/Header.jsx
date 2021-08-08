@@ -2,6 +2,7 @@ import ComputerIcon from '@material-ui/icons/Computer';
 import { Avatar } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 const Header = () => {
   const router = useRouter();

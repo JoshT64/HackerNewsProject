@@ -1,1 +1,1 @@
-Starting files for take home project. -Josh - 8/3/2021
+Hacker News Top Posts & New Posts API Fetching + Comment Rendering

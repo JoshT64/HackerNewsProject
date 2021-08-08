@@ -6,6 +6,7 @@ import CallMergeIcon from '@material-ui/icons/CallMerge';
 import { AppBar, Tab } from '@material-ui/core';
 import { TabPanel, TabContext, TabList } from '@material-ui/lab';
 import he from 'he';
+import React from 'react';
 
 const Post = () => {
   const [value, setValue] = useState('1');
@@ -15,6 +16,7 @@ const Post = () => {
     text: '',
     comments: '',
     url: '',
+    commentAuthor: '',
   });
 
   const handleChange = (event, newValue) => {
@@ -32,16 +34,26 @@ const Post = () => {
         `https://hacker-news.firebaseio.com/v0/item/${postId}.json?print=pretty`
       )
       .then((response) => {
-        let titleData = response.data.title;
-        let replacedText = response.data.text.replace(/<[^>]*>?/gm, '');
-        let textData = he.decode(replacedText);
-        let commentData = response.data.kids;
-        let url = response.data.url;
+        const responseData = response.data;
+
+        console.log(responseData.text);
+        let replacedText = responseData.text;
+        let titleData = responseData.title;
+        if (responseData.text == undefined) {
+          replacedText = '';
+        } else {
+          replacedText = responseData.text.replace(/<[^>]*>?/gm, '');
+        }
+
+        let commentData = responseData.kids;
+        let url = responseData.url;
+
         setPostData({
           title: titleData,
-          text: textData,
-          comments: commentData,
+          text: replacedText,
           url: url,
+          comments: commentData,
+          commentAuthor: '',
         });
 
         commentData.forEach(async (commentId) => {
@@ -50,6 +62,7 @@ const Post = () => {
               `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`
             )
             .then((response) => {
+              let commentAuthor = response.data.by;
               let commentResponseData = response.data.text;
               let replacedComment = commentResponseData.replace(
                 /<[^>]*>?/gm,
@@ -76,7 +89,6 @@ const Post = () => {
     await fetchPost();
   }, []);
 
-  console.log(postData);
   return (
     <div className='bg-gray-200 min-h-screen flex flex-col'>
       <Header />
@@ -99,7 +111,7 @@ const Post = () => {
       </TabContext>
       {isLoading ? (
         <svg
-          class='animate-spin -mt-1 ml-6 mr-3 h-7 w-7 text-blue-500'
+          className='animate-spin -mt-1 ml-6 mr-3 h-7 w-7 text-blue-500'
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
           viewBox='0 0 24 24'
@@ -132,13 +144,16 @@ const Post = () => {
           </div>
           <p className='m-2 mb-64'>
             <div className='ml-4 mb-1 underline'>
-              {postData.comments.length} Comments:{' '}
+              {postData.comments ? postData.comments.length : null} Comments:{' '}
             </div>
             <ul className='text-gray-900 max-w-6xl ml-4 border rounded flex flex-col border-blue-300 leading-8 pl-4 pr-4 pt-2 pb-2'>
               {postData.comments
                 ? commentText.map((comment, idx) => {
                     return (
-                      <li className='flex items-baseline' key={idx}>
+                      <li
+                        className='flex items-baseline border border-gray-300'
+                        key={idx}
+                      >
                         <p className='post-number mr-2 mb-2 opacity-30'>
                           {idx + 1 + ':'}
                         </p>

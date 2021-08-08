@@ -52,7 +52,7 @@ const TestAPI = (props) => {
     });
   };
 
-  let sliceStories = stories.slice(0, 90); //Only show 100 results
+  let sliceStories = stories.slice(0, 90); //Only show 90 results
 
   const printList = sliceStories.map((story, idx) => {
     let kidsItem;
@@ -74,7 +74,7 @@ const TestAPI = (props) => {
         <div className='hover:text-gray-500 visited:text-gray-500'>
           <Link
             href={`/${story.id}`}
-            onClick={() => dispatch(apiActions.fetchData(story.id))}
+            // onClick={() => dispatch(apiActions.fetchData(story.id))}
             className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 visited:text-gray-500 active:text-gray-500'
           >{`${story.title} `}</Link>
         </div>
@@ -109,7 +109,7 @@ const TestAPI = (props) => {
     <div>
       {isLoading ? (
         <svg
-          class='animate-spin -ml-1 mr-3 h-7 w-7 text-blue-500'
+          className='animate-spin -ml-1 mr-3 h-7 w-7 text-blue-500'
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
           viewBox='0 0 24 24'
@@ -123,7 +123,7 @@ const TestAPI = (props) => {
             strokeWidth='4'
           ></circle>
           <path
-            class='opacity-85'
+            className='opacity-85'
             fill='currentColor'
             d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
           ></path>

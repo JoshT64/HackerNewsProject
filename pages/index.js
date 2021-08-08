@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import TestAPI from '../components/TestAPI';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 import { TabPanel, TabContext, TabList } from '@material-ui/lab';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function Home() {
   const [value, setValue] = useState('1');
@@ -21,7 +21,7 @@ export default function Home() {
           <title>Create Next App</title>
           <link rel='icon' href='/favicon.ico' />
           <link rel='preconnect' href='https://fonts.googleapis.com' />
-          <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin />
+          <link rel='preconnect' href='https://fonts.gstatic.com' />
           <link
             href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap'
             rel='stylesheet'
