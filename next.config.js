@@ -5,4 +5,10 @@ module.exports = {
     }
     return config;
   },
+  eslint: {
+    plugins: ['jest'],
+  },
+  env: {
+    'jest/globals': true,
+  },
 };
