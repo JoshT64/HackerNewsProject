@@ -182,7 +182,7 @@ const Post = () => {
           target='_blank'
           rel='noopener noreferrer'
         >
-          Footer Placeholder
+          Hacker News API
           <CallMergeIcon />
         </a>
       </footer>
