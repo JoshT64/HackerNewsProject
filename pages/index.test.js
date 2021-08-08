@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import setupTest from '../setupTests';
 import React from 'react';
 import Home from '.';
@@ -18,13 +19,18 @@ describe('Main Page text Render testing', () => {
     expect(newPostText).toBeInTheDocument();
   });
 
-  // test('does fetch render the data on the home page', async () => {
-  //   render(<Home />);
-  //   const listItems = await screen.findAllByRole(
-  //     'listitem',
-  //     {},
-  //     { interval: 3000 }
-  //   );
-  //   expect(listItems).not.toHaveLength(0);
+  // test('Check if list renders on tab click', async () => {
+  //   act(() => {
+  //     render(<Home />);
+  //   });
+
+  //   const buttonElement = screen.getByTitle('tab');
+
+  //   await act(async () => {
+  //     userEvent.click(buttonElement);
+  //   });
+  //   const outputElement = await screen.findAllByRole('listitem');
+
+  //   expect(outputElement).not.toHaveLength(0);
   // });
 });

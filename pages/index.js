@@ -34,7 +34,7 @@ export default function Home() {
                 onChange={handleChange}
                 aria-label='top posts and new posts tabs'
               >
-                <Tab label='Top Posts' value='1' />
+                <Tab title='tab' name='tab' label='Top Posts' value='1' />
                 <Tab label='New Posts' value='2' />
               </TabList>
             </AppBar>
@@ -58,7 +58,7 @@ export default function Home() {
             target='_blank'
             rel='noopener noreferrer'
           >
-            Footer Placeholder
+            Hacker News API
             <CallMergeIcon />
           </a>
         </footer>

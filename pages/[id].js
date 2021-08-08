@@ -44,7 +44,12 @@ const Post = () => {
         } else {
           replacedText = responseData.text.replace(/<[^>]*>?/gm, '');
         }
-
+        let pointsData;
+        if (responseData.score == undefined) {
+          pointsData = '';
+        } else {
+          pointsData = responseData.score;
+        }
         let commentData = responseData.kids;
         let url = responseData.url;
 
@@ -53,7 +58,7 @@ const Post = () => {
           text: replacedText,
           url: url,
           comments: commentData,
-          commentAuthor: '',
+          points: pointsData,
         });
 
         commentData.forEach(async (commentId) => {
@@ -125,7 +130,7 @@ const Post = () => {
             strokeWidth='4'
           ></circle>
           <path
-            class='opacity-85'
+            className='opacity-85'
             fill='currentColor'
             d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
           ></path>
@@ -133,7 +138,10 @@ const Post = () => {
       ) : (
         <div className='m-2 flex-col'>
           <div>
-            <a href={postData.url} className='font-bold ml-2 underline'>
+            <a
+              href={postData.url}
+              className='font-bold ml-2 underline hover:text-purple-800'
+            >
               {postData.title}
             </a>
           </div>
@@ -143,8 +151,9 @@ const Post = () => {
             </p>
           </div>
           <p className='m-2 mb-64'>
-            <div className='ml-4 mb-1 underline'>
+            <div className='ml-4 mb-1 underline flex'>
               {postData.comments ? postData.comments.length : null} Comments:{' '}
+              <p className='text-gray-500 ml-2'>{postData.points} points</p>
             </div>
             <ul className='text-gray-900 max-w-6xl ml-4 border rounded flex flex-col border-blue-300 leading-8 pl-4 pr-4 pt-2 pb-2'>
               {postData.comments
@@ -154,7 +163,7 @@ const Post = () => {
                         className='flex items-baseline border border-gray-300'
                         key={idx}
                       >
-                        <p className='post-number mr-2 mb-2 opacity-30'>
+                        <p className='post-number mr-2 mb-2 opacity-30 ml-1'>
                           {idx + 1 + ':'}
                         </p>
                         {comment}
