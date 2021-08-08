@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
-import axios from 'axios';
-import TestAPI from './TestAPI';
+// import { render, screen } from '@testing-library/react';
+// import axios from 'axios';
+// import TestAPI from './TestAPI';
 
 // describe('landing page tests', () => {
 //   test('does fetch render the data on the home page', async () => {
