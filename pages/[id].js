@@ -36,7 +36,6 @@ const Post = () => {
       .then((response) => {
         const responseData = response.data;
 
-        console.log(responseData.text);
         let replacedText = responseData.text;
         let titleData = responseData.title;
         if (responseData.text == undefined) {
