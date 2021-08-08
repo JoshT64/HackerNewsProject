@@ -89,8 +89,8 @@ const Post = () => {
     setIsLoading(false);
   };
 
-  useEffect(async () => {
-    await fetchPost();
+  useEffect(() => {
+    fetchPost();
   }, []);
 
   return (

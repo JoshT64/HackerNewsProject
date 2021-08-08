@@ -2,7 +2,7 @@ import Head from 'next/head';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
 import Header from '../components/Header';
 import TestAPI from '../components/TestAPI';
-import { AppBar, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Tab } from '@material-ui/core';
 import { TabPanel, TabContext, TabList } from '@material-ui/lab';
 import React, { useState } from 'react';
 
