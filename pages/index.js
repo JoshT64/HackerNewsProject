@@ -18,7 +18,7 @@ export default function Home() {
       <Header />
       <div className='flex flex-col items-center justify-center min-h-screen'>
         <Head>
-          <title>Create Next App</title>
+          <title>Hacker News</title>
           <link rel='icon' href='/favicon.ico' />
           <link rel='preconnect' href='https://fonts.googleapis.com' />
           <link rel='preconnect' href='https://fonts.gstatic.com' />
