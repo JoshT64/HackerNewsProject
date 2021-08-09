@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import CallMergeIcon from '@material-ui/icons/CallMerge';
 import { AppBar, Tab } from '@material-ui/core';
 import { TabPanel, TabContext, TabList } from '@material-ui/lab';
 import he from 'he';
-import React from 'react';
 
 const Post = () => {
   const [value, setValue] = useState('1');
@@ -16,6 +15,7 @@ const Post = () => {
     text: '',
     comments: '',
     url: '',
+    points: '',
   });
 
   const handleChange = (event, newValue) => {
@@ -35,19 +35,22 @@ const Post = () => {
       .then((response) => {
         const responseData = response.data;
 
-        let replacedText = responseData.text;
         let titleData = responseData.title;
+
+        let replacedText = responseData.text;
         if (responseData.text == undefined) {
           replacedText = '';
         } else {
           replacedText = responseData.text.replace(/<[^>]*>?/gm, '');
         }
+
         let pointsData;
         if (responseData.score == undefined) {
           pointsData = '';
         } else {
           pointsData = responseData.score;
         }
+
         let commentData = responseData.kids;
         let url = responseData.url;
 
@@ -59,14 +62,16 @@ const Post = () => {
           points: pointsData,
         });
 
-        commentData.forEach(async (commentId) => {
+        commentData.forEach((commentId) => {
           axios
             .get(
               `https://hacker-news.firebaseio.com/v0/item/${commentId}.json?print=pretty`
             )
             .then((response) => {
               let commentAuthor = response.data.by;
-              let commentResponseData = response.data.text;
+
+              let commentResponseData =
+                response.data.text + ` By: ${commentAuthor.bold()}`;
               let replacedComment = commentResponseData.replace(
                 /<[^>]*>?/gm,
                 ''
@@ -148,7 +153,7 @@ const Post = () => {
               {postData.text ? postData.text : 'There is no text to display'}
             </p>
           </div>
-          <p className='m-2 mb-64'>
+          <div className='m-2 mb-64'>
             <div className='ml-4 mb-1 underline flex'>
               {postData.comments ? postData.comments.length : null} Comments:{' '}
               <p className='text-gray-500 ml-2'>{postData.points} points</p>
@@ -170,7 +175,7 @@ const Post = () => {
                   })
                 : 'There are no comments to display.'}
             </ul>
-          </p>
+          </div>
         </div>
       )}
 

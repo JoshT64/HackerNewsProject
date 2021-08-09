@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { apiActions } from '../store/api-state';
 import Link from 'next/link';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import dynamic from 'next/dynamic';
 
 const TestAPI = (props) => {
   const newStoriesUrl = props.url;
@@ -54,8 +52,6 @@ const TestAPI = (props) => {
 
   let sliceStories = stories.slice(0, 90); //Only show 90 results
 
-  // const printList =
-
   return (
     <div>
       {isLoading ? (
@@ -101,7 +97,6 @@ const TestAPI = (props) => {
                 <div className='hover:text-gray-500 visited:text-gray-500'>
                   <Link
                     href={`/${story.id}`}
-                    // onClick={() => dispatch(apiActions.fetchData(story.id))}
                     className='bg-gray-300 inline cursor-pointer hover:bg-gray-400 visited:text-gray-500 active:text-gray-500'
                   >{`${story.title} `}</Link>
                 </div>
